@@ -1,0 +1,24 @@
+<%- include("partials/header") %>
+
+<h1>Daftar User</h1>
+
+<ul>
+  <% users.forEach(user => { %>
+    <li>
+      <%= user.name %>
+      | <a href="/users/edit/<%= user.id %>">Edit</a>
+      <form action="/users/delete/<%= user.id %>" method="POST" style="display:inline;">
+        <button type="submit">Hapus</button>
+      </form>
+    </li>
+  <% }) %>
+</ul>
+
+<h2>Tambah User Baru</h2>
+<form action="/users" method="POST">
+  <input type="text" name="name" placeholder="Nama user" required />
+  <button type="submit">Tambah</button>
+</form>
+
+</body>
+</html>
