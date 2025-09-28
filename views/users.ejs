@@ -57,10 +57,11 @@
           </td>
           <td><%= user.bmi.toFixed(2) %></td>
           <td><%= user.bmiCat %></td>
-          <td><%= user.bmr.toFixed(2) %> Kal</td>
-          <td><%= user.tdee.toFixed(2) %> Kal</td>
+          <td><%= user.bmr.toFixed(2) %> Kkal</td>
+          <td><%= user.tdee.toFixed(2) %> Kkal</td>
           <td>
             <a href="/users/edit/<%= user.id %>">Edit</a>
+            <a href="/users/<%= user.id %>/detail">Detail</a>
             <form action="/users/delete/<%= user.id %>" method="POST" style="display:inline;">
               <button type="submit">Hapus</button>
             </form>

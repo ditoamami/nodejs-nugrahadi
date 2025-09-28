@@ -1,0 +1,144 @@
+<%- include("../partials/header") %>
+
+<style>
+  form div {
+    margin-bottom: 12px; /* kasih jarak antar field */
+  }
+
+  label {
+    display: block;      /* biar label selalu di atas input */
+    margin-bottom: 4px;  /* jarak kecil label ke input */
+    font-weight: bold;   /* biar label lebih jelas */
+  }
+
+  input, select {
+    width: 200px;        /* biar konsisten lebar input */
+    padding: 5px;
+  }
+</style>
+
+<h1>Detail Rencana Latihan & Nutrisi</h1>
+
+<h2><%= user.name %> - <%= user.age %> tahun</h2>
+<p><strong>Berat:</strong> <%= user.weight %> kg | <strong>Tinggi:</strong> <%= user.height %> cm</p>
+<p><strong>BMI:</strong> <%= user.bmi.toFixed(2) %> kg/m² (<%= user.bmiCat %>)</p>
+<p><strong>BMR:</strong> <%= user.bmr.toFixed(2) %> Kkal | <strong>TDEE:</strong> <%= user.tdee.toFixed(2) %> Kkal</p>
+
+<hr>
+
+<h3>Saran Nutrisi</h3>
+<% 
+  // Rekomendasi pola makanan & latihan (nested array)
+  const goals = {
+    maintainchild: [
+      ["Untuk latihan lakukan olahraga dengan proporsi :", "60% permainan aktif", "40% variasi (senam, berenang)"],
+      ["Untuk makanan, diusahakan makan :", "Porsi seimbang (karbo, protein, lemak sehat)", "3x makan utama + 2 camilan sehat"]
+    ],
+    bulkchild: [
+      ["Untuk latihan lakukan olahraga dengan proporsi :", "70% permainan aktif (lari, sepak bola, panjat)", "30% aktivitas otot ringan (push-up, lompat)"],
+      ["Untuk makanan, diusahakan makan :", "Fokus protein hewani & nabati (susu, telur, tempe)", "Karbohidrat cukup untuk energi", "Camilan sehat (buah, kacang)"]
+    ],
+    cutchild: [
+      ["Untuk latihan lakukan olahraga dengan proporsi :", "70% aktivitas low-impact (jalan, renang)", "30% latihan kekuatan ringan"],
+      ["Untuk makanan, diusahakan makan :", "Kontrol gula & makanan olahan", "Perbanyak sayur & buah", "Batasi camilan manis/berminyak"]
+    ],
+    maintainteen: [
+      ["Untuk latihan lakukan olahraga dengan proporsi :", "Pola makan seimbang", "Cukup protein & kalsium (tumbuh tinggi + otot)", "Hindari junk food berlebihan"],
+      ["Untuk makanan, diusahakan makan :", "Porsi seimbang dengan komposisi 50% karbohidrat, 25% protein, dan 25% lemak sehat", "Sayur dan buah setiap kali makan"]
+    ],
+    bulkteen: [
+      ["Untuk latihan lakukan olahraga dengan proporsi :", "60% strength training (bodyweight, gym pemula)", "40% cardio ringan"],
+      ["Untuk makanan, diusahakan makan :", "Kalori surplus (karbo kompleks + protein tinggi)", "Susu/produk olahan untuk tulang & otot", "Lemak sehat untuk hormon"]
+    ],
+    cutteen: [
+      ["Untuk latihan lakukan olahraga dengan proporsi :", "60% cardio (lari, sepeda, HIIT ringan)", "40% strength (untuk jaga otot)"],
+      ["Untuk makanan, diusahakan makan :", "Defisit kalori moderat", "Porsi kecil tapi sering", "Protein tinggi + sayur banyak", "Hindari minuman manis & junk food"]
+    ],
+    maintainadult: [
+      ["Untuk latihan lakukan olahraga dengan proporsi :", "50% strength", "40% cardio", "10% flexibility"],
+      ["Untuk makanan, diusahakan makan :", "Porsi seimbang dengan komposisi 50% karbohidrat, 25% protein, dan 25% lemak sehat", "Sayur dan buah setiap kali makan"]
+    ],
+    bulkadult: [
+      ["Untuk latihan lakukan olahraga dengan proporsi :", "70% Strength Training (Gym dan Chalistenic)", "30% Cardio (Lari atau bersepeda)"],
+      ["Untuk makanan, diusahakan makan :", "Protein Tinggi untuk Muscle Building", "Karbohidrat Kompleks (Beras merah, oat, ubi)", "Healthy Fat (Alpukat, kacang-kacangan, minyak zaitun)"]
+    ],
+    cutadult: [
+      ["Untuk latihan lakukan olahraga dengan proporsi :", "60% Cardio (Jalan cepat, aerobik, renang)", "40% Strength Training (Angkat Beban Sedang)"],
+      ["Untuk makanan, diusahakan makan :", "Protein tinggi dengan Karbohidrat rendah", "Banyak serat (sayur, buah, biji-bijian)", "Menghindari gula dan lemak jenuh"]
+    ],
+    maintainold: [
+      ["Untuk latihan lakukan olahraga dengan proporsi :", "40% cardio ringan (jalan, berenang)", "30% strength ringan", "30% keseimbangan/fleksibilitas"],
+      ["Untuk makanan, diusahakan makan :", "Makan kecil tapi sering", "Kaya serat, protein sedang", "Batasi garam, gula, lemak jenuh", "Perbanyak cairan"]
+    ],
+    bulkold: [
+      ["Untuk latihan lakukan olahraga dengan proporsi :", "60% latihan otot ringan (resistance band, yoga)", "40% jalan santai"],
+      ["Untuk makanan, diusahakan makan :", "Cukup protein (jaga massa otot)", "Suplemen kalsium/vit D bila perlu", "Karbo secukupnya (mudah cerna)"]
+    ],
+    cutold: [
+      ["Untuk latihan lakukan olahraga dengan proporsi :", "50% jalan santai/renang", "30% kekuatan ringan", "20% keseimbangan/fleksibilitas"],
+      ["Untuk makanan, diusahakan makan :", "Defisit ringan (jangan ekstrem)", "Protein cukup untuk otot", "Banyak sayur/buah lunak", "Hindari makanan olahan dan garam berlebih"]
+    ]
+  };
+
+  let planType;
+  if(user.age < 18) {    
+    if (user.bmiCat === "Normal") {
+      planType = "maintainchild";
+    } else if (user.bmiCat === "Overweight (risiko)" || user.bmiCat === "Obesitas") {
+      planType = "cutchild";
+    } else if (user.bmiCat === "Kurus") {
+      planType = "bulkchild";
+    } else {
+      planType = "maintainchild";
+    }
+  } else if (user.age < 30) {
+    if (user.bmiCat === "Normal") {
+      planType = "maintainteen";
+    } else if (user.bmiCat === "Overweight (risiko)" || user.bmiCat === "Obesitas") {
+      planType = "cutteen";
+    } else if (user.bmiCat === "Kurus") {
+      planType = "bulkteen";
+    } else {
+      planType = "maintainteen";
+    }
+  } else if (user.age < 60) {
+    if (user.bmiCat === "Normal") {
+      planType = "maintainadult";
+    } else if (user.bmiCat === "Overweight (risiko)" || user.bmiCat === "Obesitas") {
+      planType = "cutadult";
+    } else if (user.bmiCat === "Kurus") {
+      planType = "bulkadult";
+    } else {
+      planType = "maintainadult";
+    }
+  } else {
+    if (user.bmiCat === "Normal") {
+      planType = "maintainold";
+    } else if (user.bmiCat === "Overweight (risiko)" || user.bmiCat === "Obesitas") {
+      planType = "cutold";
+    } else if (user.bmiCat === "Kurus") {
+      planType = "bulkold";
+    } else {
+      planType = "maintainold";
+    }
+  }
+%>
+
+<ul>
+  <% goals[planType].forEach((group) => { %>
+    <li>
+      <strong><%= group[0] %></strong>
+      <% if (group.length > 1) { %>
+        <ul>
+          <% group.slice(1).forEach((rec) => { %>
+            <li><%= rec %></li>
+          <% }) %>
+        </ul>
+      <% } %>
+    </li>
+  <% }) %>
+</ul>
+
+
+
+<a href="/">Kembali ke daftar user</a>

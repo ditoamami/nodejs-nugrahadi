@@ -8,7 +8,8 @@ export const addUser = (name, age, gender, height, weight, activity, bmi, bmiCat
   return newUser;
 };
 
-export const findUserById = (id) => users.find(u => u.id === id);
+export const findUserById = (id) => users.find(u => u.id == id);
+
 
 export const updateUserById = (id, name, age, gender, height, weight, activity, bmi, bmiCat, bmr, tdee) => {
   users = users.map(u => (u.id === id ? { ...u, name, age, gender, height, weight, activity, bmi, bmiCat, bmr, tdee } : u));

@@ -72,6 +72,11 @@ export const createUser = (req, res) => {
 export const editUserForm = (req, res) => {
   const id = parseInt(req.params.id);
   const user = findUserById(id);
+  
+  if (!user) {
+    return res.status(404).send("User tidak ditemukan");
+  }
+  
   res.render("edit", { user });
 };
 
@@ -95,4 +100,16 @@ export const deleteUser = (req, res) => {
   const id = parseInt(req.params.id);
   deleteUserById(id);
   res.redirect("/");
+};
+
+// Detail User
+export const detailUser = (req, res) => {
+  const id = parseInt(req.params.id);
+  const user = findUserById(id);
+
+  if (!user) {
+    return res.status(404).send("User tidak ditemukan");
+  }
+
+  res.render("users/detail", { user });
 };

@@ -5,7 +5,8 @@ import {
   createUserForm,
   editUserForm,
   updateUser,
-  deleteUser
+  deleteUser,
+  detailUser
 } from "../controllers/userController.js";
 
 import { checkWords } from "../controllers/wordController.js";
@@ -25,6 +26,9 @@ router.post("/users/edit/:id", updateUser);
 
 // Delete
 router.post("/users/delete/:id", deleteUser);
+
+// Detail user untuk lihat rekomendasi
+router.get("/users/:id/detail", detailUser);
 
 // Check Words
 router.get("/check-words", (req, res) => {
