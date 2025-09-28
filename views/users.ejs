@@ -1,24 +1,75 @@
 <%- include("partials/header") %>
 
-<h1>Daftar User</h1>
+<h1>Daftar User dan Analisa Kesehatan Tubuh</h1>
 
-<ul>
-  <% users.forEach(user => { %>
-    <li>
-      <%= user.name %>
-      | <a href="/users/edit/<%= user.id %>">Edit</a>
-      <form action="/users/delete/<%= user.id %>" method="POST" style="display:inline;">
-        <button type="submit">Hapus</button>
-      </form>
-    </li>
-  <% }) %>
-</ul>
+<div style="margin-bottom: 20px; font-size: 14px; line-height: 1.6;">
+  <p>Berikut adalah daftar user beserta analisa kesehatan tubuh mereka berdasarkan data yang dimasukkan. 
+    Analisa ini mencakup perhitungan BMI, BMR, dan TDEE yang dapat membantu dalam memahami kondisi kesehatan 
+    dan kebutuhan kalori harian.</p>
+  <p><strong>Penjelasan Singkat:</strong></p>
+  <p><strong>BMI (Body Mass Index)</strong>: Indeks massa tubuh, dihitung dari berat dan tinggi badan. 
+    Digunakan untuk menentukan apakah seseorang tergolong kurus, normal, kelebihan berat badan, atau obesitas.</p>
+  <p><strong>BMR (Basal Metabolic Rate)</strong>: Jumlah energi (kalori) yang dibutuhkan tubuh untuk 
+    menjalankan fungsi dasar saat istirahat total, seperti bernapas, memompa jantung, dan menjaga suhu tubuh.</p>
+  <p><strong>TDEE (Total Daily Energy Expenditure)</strong>: Total energi yang dibakar tubuh dalam sehari, 
+    termasuk BMR, aktivitas fisik, dan proses pencernaan makanan. Biasanya dihitung dengan BMR × faktor aktivitas.</p>
+</div>
 
-<h2>Tambah User Baru</h2>
-<form action="/users" method="POST">
-  <input type="text" name="name" placeholder="Nama user" required />
-  <button type="submit">Tambah</button>
-</form>
+<a href="/users/create">Tambah User Baru</a>
+<br><br>
+
+<table border="1" cellpadding="8" cellspacing="0">
+  <thead>
+    <tr>
+      <th>Nama</th>
+      <th>Umur</th>
+      <th>Jenis Kelamin</th>
+      <th>Tinggi (cm)</th>
+      <th>Berat (kg)</th>
+      <th>Aktivitas</th>
+      <th>BMI</th>
+      <th>Kategori BMI</th>
+      <th>BMR</th>
+      <th>TDEE</th>
+      <th>Aksi</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% if (users.length === 0) { %>
+      <tr>
+        <td colspan="11" style="text-align:center;">Belum ada data user</td>
+      </tr>
+    <% } else { %>
+      <% users.forEach(user => { %>
+        <tr>
+          <td><%= user.name %></td>
+          <td><%= user.age %> Tahun</td>
+          <td><%= user.gender === "male" ? "Pria" : "Wanita" %></td>
+          <td><%= user.height %> cm</td>
+          <td><%= user.weight %> kg</td>
+          <td>
+            <% if (user.activity === "sedentary") { %> Sangat Jarang
+            <% } else if (user.activity === "light") { %> Ringan
+            <% } else if (user.activity === "moderate") { %> Sedang
+            <% } else if (user.activity === "active") { %> Aktif
+            <% } else if (user.activity === "very") { %> Sangat Aktif
+            <% } %>
+          </td>
+          <td><%= user.bmi.toFixed(2) %></td>
+          <td><%= user.bmiCat %></td>
+          <td><%= user.bmr.toFixed(2) %> Kal</td>
+          <td><%= user.tdee.toFixed(2) %> Kal</td>
+          <td>
+            <a href="/users/edit/<%= user.id %>">Edit</a>
+            <form action="/users/delete/<%= user.id %>" method="POST" style="display:inline;">
+              <button type="submit">Hapus</button>
+            </form>
+          </td>
+        </tr>
+      <% }) %>
+    <% } %>
+  </tbody>
+</table>
 
 </body>
 </html>

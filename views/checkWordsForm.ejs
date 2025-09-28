@@ -1,0 +1,48 @@
+<%- include("partials/header") %>
+
+<h1>Check Words</h1>
+<form action="/check-words" method="POST">
+  <label>Input 1:</label><br />
+  <input type="text" name="input1" value="<%= input1 || '' %>" required /><br /><br />
+
+  <label>Input 2:</label><br />
+  <input type="text" name="input2" value="<%= input2 || '' %>" required /><br /><br />
+
+  <label>Type:</label><br />
+  <select name="type" required>
+    <option value="sensitive" <%= type === 'sensitive' ? 'selected' : '' %>>Sensitive</option>
+    <option value="non-sensitive" <%= type === 'non-sensitive' ? 'selected' : '' %>>Non-Sensitive</option>
+  </select><br /><br />
+
+  <button type="submit">Check</button>
+</form>
+
+<% if (typeof result !== "undefined") { %>
+  <hr />
+  <h2>Hasil Pengecekan</h2>
+  <table border="1" cellpadding="6">
+    <tr>
+      <th>Input 1</th>
+      <td><%= input1 %></td>
+    </tr>
+    <tr>
+      <th>Input 2</th>
+      <td><%= input2 %></td>
+    </tr>
+    <tr>
+      <th>Type</th>
+      <td><%= type %></td>
+    </tr>
+    <tr>
+      <th>Match Count</th>
+      <td><%= result.matchCount %> / <%= result.totalChars %></td>
+    </tr>
+    <tr>
+      <th>Percentage</th>
+      <td><%= result.percentage %>%</td>
+    </tr>
+  </table>
+<% } %>
+
+</body>
+</html>

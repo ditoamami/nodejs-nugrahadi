@@ -1,0 +1,68 @@
+<%- include("../partials/header") %>
+<style>
+  form div {
+    margin-bottom: 12px; /* kasih jarak antar field */
+  }
+
+  label {
+    display: block;      /* biar label selalu di atas input */
+    margin-bottom: 4px;  /* jarak kecil label ke input */
+    font-weight: bold;   /* biar label lebih jelas */
+  }
+
+  input, select {
+    width: 200px;        /* biar konsisten lebar input */
+    padding: 5px;
+  }
+</style>
+
+<h1>Tambah User Baru</h1>
+<form action="/users" method="POST">
+  <div>
+    <label>Nama:</label><br>
+    <input name="name" placeholder="Nama" required>
+  </div>
+
+  <div>
+    <label>Umur:</label><br>
+    <input name="age" placeholder="Umur" type="number" required>
+  </div>
+
+  <div>
+    <label>Jenis Kelamin:</label><br>
+    <select name="gender">
+      <option value="male">Pria</option>
+      <option value="female">Wanita</option>
+    </select>
+  </div>
+
+  <div>
+    <label>Tinggi (cm):</label><br>
+    <input name="height" placeholder="Tinggi (cm)" type="number" required>
+  </div>
+
+  <div>
+    <label>Berat (kg):</label><br>
+    <input name="weight" placeholder="Berat (kg)" type="number" required>
+  </div>
+
+  <div>
+    <label>Aktivitas:</label><br>
+    <select name="activity">
+      <option value="sedentary">Sangat Jarang</option>
+      <option value="light">Ringan</option>
+      <option value="moderate">Sedang</option>
+      <option value="active">Aktif</option>
+      <option value="very">Sangat Aktif</option>
+    </select>
+  </div>
+
+  <br>
+  <button type="submit">Tambah</button>
+  <a href="/">
+    <button type="button">Kembali</button>
+  </a>
+</form>
+
+</body>
+</html>

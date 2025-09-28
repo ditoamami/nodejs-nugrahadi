@@ -1,10 +1,67 @@
 <%- include("partials/header") %>
+<style>
+  form div {
+    margin-bottom: 12px; /* kasih jarak antar field */
+  }
+
+  label {
+    display: block;      /* biar label selalu di atas input */
+    margin-bottom: 4px;  /* jarak kecil label ke input */
+    font-weight: bold;   /* biar label lebih jelas */
+  }
+
+  input, select {
+    width: 200px;        /* biar konsisten lebar input */
+    padding: 5px;
+  }
+</style>
 
 <h1>Edit User</h1>
-
 <form action="/users/edit/<%= user.id %>" method="POST">
-  <input type="text" name="name" value="<%= user.name %>" required />
+  <div>
+    <label>Nama:</label>
+    <input name="name" value="<%= user.name %>" required>
+  </div>
+
+  <div>
+    <label>Umur:</label>
+    <input name="age" type="number" value="<%= user.age %>" required>
+  </div>
+
+  <div>
+    <label>Jenis Kelamin:</label>
+    <select name="gender">
+      <option value="male"   <%= user.gender === "male" ? "selected" : "" %>>Pria</option>
+      <option value="female" <%= user.gender === "female" ? "selected" : "" %>>Wanita</option>
+    </select>
+  </div>
+
+  <div>
+    <label>Tinggi (cm):</label>
+    <input name="height" type="number" value="<%= user.height %>" required>
+  </div>
+
+  <div>
+    <label>Berat (kg):</label>
+    <input name="weight" type="number" value="<%= user.weight %>" required>
+  </div>
+
+  <div>
+    <label>Aktivitas:</label>
+    <select name="activity">
+      <option value="sedentary" <%= user.activity === "sedentary" ? "selected" : "" %>>Sangat Jarang</option>
+      <option value="light"     <%= user.activity === "light" ? "selected" : "" %>>Ringan</option>
+      <option value="moderate"  <%= user.activity === "moderate" ? "selected" : "" %>>Sedang</option>
+      <option value="active"    <%= user.activity === "active" ? "selected" : "" %>>Aktif</option>
+      <option value="very"      <%= user.activity === "very" ? "selected" : "" %>>Sangat Aktif</option>
+    </select>
+  </div>
+
+  <br>
   <button type="submit">Simpan</button>
+  <a href="/">
+    <button type="button">Kembali</button>
+  </a>
 </form>
 
 </body>
